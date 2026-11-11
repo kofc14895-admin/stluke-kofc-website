@@ -1,0 +1,6 @@
+# DRAFT: keep search engines out until launch.
+# At launch, replace this file with:
+#   User-agent: *
+#   Allow: /
+User-agent: *
+Disallow: /
