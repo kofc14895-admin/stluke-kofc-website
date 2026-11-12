@@ -279,8 +279,55 @@
   }
 
   // ---- Photo carousel: <div data-gallery> reads SITE.photos ----
+  // Photos and posters picked in the Member Center are read from the "Website Photos" tab (gviz JSONP).
+  // Columns: Photo ID, Caption, Type, Link, Public Site?, Show From, Show Through, Order.
+  function loadSitePhotos(done) {
+    var P = S.sitePhotos;
+    if (!P || !P.sheetId) { done(null); return; }
+    var cb = "__photoCb" + Date.now(), finished = false;
+    function end(v) { if (finished) return; finished = true; clearTimeout(timer); done(v); }
+    var timer = setTimeout(function () { end(null); }, 15000);
+    window[cb] = function (r) {
+      var out = null;
+      try {
+        if (r.status && r.status !== "ok") throw new Error("gviz");
+        var now = new Date();
+        out = [];
+        (r.table.rows || []).forEach(function (row) {
+          var c = row.c || [], v = function (i) { return c[i] && c[i].v != null ? c[i].v : ""; };
+          var id = String(v(0)).trim();
+          if (!id || !truthy(v(4))) return;
+          var from = cellDate(c[5]), thru = cellDate(c[6]);
+          if (from && from > now) return;
+          if (thru) { thru = new Date(thru.getFullYear(), thru.getMonth(), thru.getDate(), 23, 59, 59); if (thru < now) return; }
+          var link = String(v(3)).trim();
+          if (link && !/^(https:\/\/|[a-z0-9\-]+\.html$)/i.test(link)) link = "";
+          var ord = v(7) === "" ? NaN : Number(v(7));
+          out.push({ src: "https://drive.google.com/thumbnail?id=" + encodeURIComponent(id) + "&sz=w1400",
+                     type: /poster/i.test(String(v(2))) ? "poster" : "photo", caption: String(v(1)), link: link,
+                     order: isNaN(ord) ? 1e9 : ord, from: from ? from.getTime() : 0 });
+        });
+        out.sort(function (a, b) { return (a.order - b.order) || (b.from - a.from); });
+      } catch (e) { out = null; }
+      end(out);
+    };
+    var s = document.createElement("script");
+    s.onerror = function () { end(null); };
+    s.src = "https://docs.google.com/spreadsheets/d/" + encodeURIComponent(P.sheetId) +
+      "/gviz/tq?tqx=out:json;responseHandler:" + cb + "&headers=1&sheet=" + encodeURIComponent(P.tab || "Website Photos");
+    document.head.appendChild(s);
+  }
+
   function buildGallery(box) {
-    var items = (S.photos || []).slice(0, 10);
+    loadSitePhotos(function (fromSheet) {
+      // Sheet read worked and has pictures: use them. Otherwise, in draft mode (or if the sheet could not be read) fall back to the test list.
+      var list = fromSheet && fromSheet.length ? fromSheet : ((S.draft || fromSheet === null) ? (S.photos || []) : []);
+      renderGallery(box, list);
+    });
+  }
+
+  function renderGallery(box, list) {
+    var items = (list || []).slice(0, 10);
     var section = box.closest("section");
     if (!items.length) { if (section && !S.draft) section.style.display = "none"; return; }
     var i = 0, timer = null;

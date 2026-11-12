@@ -75,7 +75,15 @@ window.SITE = {
     columns: { date: "Date", title: "Activity", type: "Type", description: "Description", show: "Public Site?" }
   },
 
-  // Rotating photos and posters on the home page (TEMPORARY test list; later fed from the Member Center picker).
+  // Photos and posters picked in the Member Center ("Website photos" page) are read from the
+  // "Website Photos" tab of the same workbook as the Announcements.
+  sitePhotos: {
+    sheetId: "1TPuMPjpACtOOeW2uJd8t2ZN3AkMVoKPnKV8gEOKLjLQ",
+    tab: "Website Photos"
+  },
+
+  // Rotating photos and posters on the home page: TEMPORARY test list, used only while the tab above is empty
+  // (draft mode) or cannot be read. Delete this list before launch.
   // type: "photo" fills the frame; "poster" shows the whole image. link is optional.
   photos: [
     { src: "poster-sample.jpg", type: "poster", caption: "Stay for Breakfast: Sunday, January 10", link: "events.html" },
