@@ -38,9 +38,10 @@ Open `config.js`. Change the text between the quotes and save.
 
 - **Square shop:** `squareShopUrl`. Both "Pay dues" and "Donate" buttons use it. Replace it with direct links to the dues and donation items later if you like.
 - **Member Center:** `memberCenterUrl`.
-- **Meeting time and place, rosary time:** `meeting`, `meetingPlace`, `rosary`.
+- **Meeting time and place, rosary time:** `meeting`, `meetingPlace`, `rosary`. Meetings are for members, so the public pages no longer show these.
 - **Role emails:** `emailGrandKnight`, `emailMembership`, `emailFinancialSecretary`. Create these as Google Groups on kofc14895.org before launch.
 - **Join page referral code:** `referralCode`. Confirm it is council-wide before publishing it.
+- **Announcements (home page and News):** read live from the Member Center's Google Sheet. In `config.js` set `announcements.sheetId` (the long code in the sheet's address) and `tab`. In the Member Center's announcements tab add a column named **Show on Public Site** and type Yes on the rows that may appear here. Column names are set under `announcements.columns`. Note: anyone who knows the sheet ID can read the whole tab, so keep anything truly private out of it.
 - **Live calendar:** paste the Google Calendar embed address into `calendarEmbedUrl`.
 - **News:** add an entry at the top of `news`.
 - **"Coming up next" strip on the home page:** `upcomingTitle`, `upcomingWhen`, `upcomingDetail`, `upcomingNote`. Update it after each event.

@@ -14,6 +14,7 @@ window.SITE = {
   address1: "7575 Holliday Drive East",
   city: "Indianapolis, IN 46260",
 
+  // Members-only details. Not shown on the public site (meetings are for members).
   meeting: "[Meeting day and time]",
   meetingPlace: "[Room], St. Luke Catholic Church",
   rosary: "[Rosary time]",
@@ -44,6 +45,22 @@ window.SITE = {
   upcomingWhen: "Sunday, January 10, 2027",
   upcomingDetail: "After the 7:30 and 9:30 Masses · School cafeteria",
   upcomingNote: "Bring the family. Everyone is welcome; freewill offering.",
+
+  // Announcements: read live from the SAME Google Sheet the Member Center uses.
+  // Only rows whose "Show on Public Site" cell says Yes are shown here.
+  // Leave sheetId blank and the section stays a placeholder (draft) or hidden (live).
+  announcements: {
+    sheetId: "",                    // the Member Center sheet's ID (long code in its address)
+    tab: "Announcements",           // the tab name that holds announcements
+    limit: 3,                       // how many to show on the home page
+    columns: {                      // header names in the sheet (not case sensitive)
+      date: "Date",
+      title: "Title",
+      message: "Message",
+      link: "Link",                 // optional
+      show: "Show on Public Site"   // the new column: Yes / No
+    }
+  },
 
   // Latest news (newest first). Add a url to link a headline somewhere.
   news: [

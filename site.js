@@ -10,7 +10,7 @@
     ["What We Do", "what-we-do.html"],
     ["Events", "events.html"],
     ["Volunteer", "volunteer.html"],
-    ["Get Involved", "join.html"],
+    ["Join Us", "join.html"],
     ["Support Us", "support.html"],
     ["Contact", "contact.html"]
   ];
@@ -53,8 +53,8 @@
 
   function footer() {
     return '<footer class="site-footer"><div class="container footer-grid">' +
-      '<div><h2 class="footer-h">Meetings</h2>' +
-        "<p>" + esc(S.meeting) + "<br>" + esc(S.meetingPlace) + "<br>" + esc(S.address1) + "<br>" + esc(S.city) + "</p></div>" +
+      '<div><h2 class="footer-h">Find us</h2>' +
+        "<p>" + esc(S.parishName) + "<br>" + esc(S.address1) + "<br>" + esc(S.city) + "</p></div>" +
       '<div><h2 class="footer-h">Contact</h2><p>' +
         '<a href="mailto:' + esc(S.emailGrandKnight) + '">' + esc(S.emailGrandKnight) + "</a><br>" +
         '<a href="mailto:' + esc(S.emailMembership) + '">' + esc(S.emailMembership) + "</a><br>" +
@@ -84,6 +84,67 @@
       return '<article class="news-item"><p class="news-date">' + esc(fmtDate(n.date)) + "</p>" +
         '<h3 class="news-title">' + title + "</h3><p>" + esc(n.summary || "") + "</p></article>";
     }).join("");
+  }
+
+
+  // ---- Announcements: live from the Member Center's Google Sheet (gviz JSONP) ----
+  function truthy(v) {
+    if (v === true) return true;
+    return /^(y|yes|true|x|1)$/i.test(String(v == null ? "" : v).trim());
+  }
+  function cellDate(cell) {
+    if (!cell || cell.v == null) return null;
+    var v = cell.v, m = /^Date\((\d+),(\d+),(\d+)/.exec(String(v));
+    var d = m ? new Date(+m[1], +m[2], +m[3]) : new Date(v);
+    return isNaN(d) ? null : d;
+  }
+  function annHtml(items, limit) {
+    return items.slice(0, limit).map(function (a) {
+      var date = a.date ? '<p class="news-date">' + esc(a.date.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })) + "</p>" : "";
+      var link = /^https?:/i.test(a.link || "") ? ' <a class="text-link" href="' + esc(a.link) + '" target="_blank" rel="noopener">More &rarr;</a>' : "";
+      return '<article class="announce-item">' + date + '<h3 class="news-title">' + esc(a.title) + "</h3>" +
+        "<p>" + esc(a.message).replace(/\n/g, "<br>") + link + "</p></article>";
+    }).join("");
+  }
+  function loadAnnouncements(box) {
+    var A = S.announcements || {}, cols = A.columns || {};
+    var limit = parseInt(box.getAttribute("data-limit"), 10) || A.limit || 3;
+    var section = box.closest("section");
+    var done = false;
+    function show(items) {
+      if (done) return; done = true;
+      if (items.length) { box.innerHTML = annHtml(items, limit); return; }
+      if (S.draft) {
+        box.innerHTML = '<div class="placeholder-box"><p style="margin:0"><strong>Announcements from the Member Center will appear here.</strong> ' +
+          'Set <code>announcements.sheetId</code> in <code>config.js</code>. Only rows marked Yes in the &ldquo;Show on Public Site&rdquo; column are shown. If there are none, this section hides itself when the site goes live.</p></div>';
+      } else if (section) { section.style.display = "none"; }
+    }
+    if (!A.sheetId) { show([]); return; }
+    var cb = "__annCb" + Date.now();
+    var timer = setTimeout(function () { show([]); }, 20000);
+    window[cb] = function (r) {
+      clearTimeout(timer);
+      var items = [];
+      try {
+        var labels = (r.table.cols || []).map(function (c) { return String(c.label || "").trim().toLowerCase(); });
+        var idx = function (name) { return labels.indexOf(String(name || "").trim().toLowerCase()); };
+        var iD = idx(cols.date), iT = idx(cols.title), iM = idx(cols.message), iL = idx(cols.link), iS = idx(cols.show);
+        (r.table.rows || []).forEach(function (row) {
+          var c = row.c || [];
+          var val = function (i) { return i >= 0 && c[i] && c[i].v != null ? c[i].v : ""; };
+          if (iS < 0 || !truthy(val(iS))) return;
+          if (!String(val(iT)).trim()) return;
+          items.push({ date: iD >= 0 ? cellDate(c[iD]) : null, title: String(val(iT)), message: String(val(iM)), link: String(val(iL)) });
+        });
+        items.sort(function (a, b) { return (b.date ? b.date.getTime() : 0) - (a.date ? a.date.getTime() : 0); });
+      } catch (e) { items = []; }
+      show(items);
+    };
+    var s = document.createElement("script");
+    s.onerror = function () { clearTimeout(timer); show([]); };
+    s.src = "https://docs.google.com/spreadsheets/d/" + encodeURIComponent(A.sheetId) +
+      "/gviz/tq?tqx=out:json;responseHandler:" + cb + "&headers=1&sheet=" + encodeURIComponent(A.tab || "Announcements");
+    document.head.appendChild(s);
   }
 
   function boot() {
@@ -129,6 +190,8 @@
     Array.prototype.forEach.call(document.querySelectorAll("[data-news]"), function (el) {
       el.innerHTML = newsHtml(parseInt(el.getAttribute("data-news"), 10) || 99);
     });
+    // Announcements: <div data-announcements data-limit="3">
+    Array.prototype.forEach.call(document.querySelectorAll("[data-announcements]"), loadAnnouncements);
     // Calendar embed: <div data-calendar> keeps its placeholder until calendarEmbedUrl is set
     var cal = document.querySelector("[data-calendar]");
     if (cal && S.calendarEmbedUrl) {

@@ -246,3 +246,13 @@ body.draft .draft-only { display: block; }
 @media (max-width: 600px) { .practical-inner { display: grid; gap: 7px; } .why-grid { grid-template-columns: 1fr; } .welcome { flex-direction: column; } }
 /* v6: stack the four cards on phones instead of side-swiping */
 @media (max-width: 700px) { .pillar-cards { display: grid; grid-template-columns: minmax(0, 1fr); overflow: visible; margin-right: 0; padding: 0; gap: 15px; } .pillar-card { min-width: 0; width: 100%; } .pillar-media { height: auto; aspect-ratio: 16/10; } }
+
+/* ---- Announcements ---- */
+.announce-list { display: grid; gap: 16px; margin-top: 22px; }
+.announce-item { background: #fff; border: 1px solid #DCE3EE; border-left: 5px solid var(--gold); border-radius: 12px; padding: 20px 24px; }
+.announce-item .news-title { margin: 0 0 8px; }
+.announce-item p:last-child { margin-bottom: 0; }
+.faq-intro { max-width: 760px; }
+.pillar-block { margin-top: 44px; }
+.pillar-block:first-of-type { margin-top: 8px; }
+.pillar-block h2 { border-top: 4px solid var(--gold); padding-top: 14px; }
