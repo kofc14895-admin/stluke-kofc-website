@@ -41,6 +41,7 @@ p { margin: 0 0 14px; }
 .site-header { background: var(--cream); border-bottom: 1px solid var(--line); position: relative; }
 .header-inner { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 20px; padding-top: 12px; padding-bottom: 12px; }
 .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; color: var(--navy); }
+.brand-logo { display: block; width: 46px; height: 46px; object-fit: contain; flex-shrink: 0; }
 .brand-text { display: flex; flex-direction: column; }
 .brand-name { font-family: var(--serif); font-weight: 700; font-size: 21px; line-height: 1.1; }
 .brand-sub { font-size: 12px; letter-spacing: 0.12em; color: var(--muted); }
@@ -275,7 +276,7 @@ body.draft .draft-only { display: block; }
 .gal-dots button { width: 28px; height: 28px; border: 0; background: transparent; cursor: pointer; position: relative; padding: 0; }
 .gal-dots button::after { content: ""; position: absolute; inset: 9px; border-radius: 50%; background: #B9C3D6; }
 .gal-dots button.on::after { background: var(--navy); }
-@media (max-width: 600px) { .gal { aspect-ratio: 4/3; } .gal-btn { width: 40px; height: 40px; } }
+@media (max-width: 600px) { .gal-btn { width: 40px; height: 40px; } }
 @media (prefers-reduced-motion: reduce) { .gal-slide { transition: none; } }
 
 .announce-type { margin: 0 0 6px; font-size: .78rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--bronze); }

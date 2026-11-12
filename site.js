@@ -40,7 +40,7 @@
         '<a class="btn btn-gold btn-sm" href="members.html">Member sign-in</a>' +
       "</div></div>" +
       '<header class="site-header"><div class="container header-inner">' +
-        '<a class="brand" href="index.html">' + shield(34) +
+        '<a class="brand" href="index.html"><img class="brand-logo" src="logo.png" width="46" height="46" alt="">' +
           '<span class="brand-text"><span class="brand-name">' + esc(S.councilName) + "</span>" +
           '<span class="brand-sub">COUNCIL #' + esc(S.councilNumber) + "</span></span></a>" +
         '<button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">Menu</button>' +
