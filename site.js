@@ -147,6 +147,47 @@
     document.head.appendChild(s);
   }
 
+
+  // ---- Photo carousel: <div data-gallery> reads SITE.photos ----
+  function buildGallery(box) {
+    var items = (S.photos || []).slice(0, 10);
+    var section = box.closest("section");
+    if (!items.length) { if (section && !S.draft) section.style.display = "none"; return; }
+    var i = 0, timer = null;
+    var reduce = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+    box.innerHTML =
+      '<div class="gal" role="region" aria-roledescription="carousel" aria-label="Photos and posters">' +
+        '<div class="gal-stage">' + items.map(function (p, n) {
+          var img = '<img src="' + esc(p.src) + '" alt="' + esc(p.caption || "") + '"' + (n ? ' loading="lazy"' : "") + ">";
+          var inner = p.link ? '<a href="' + esc(p.link) + '">' + img + "</a>" : img;
+          return '<figure class="gal-slide ' + (p.type === "poster" ? "is-poster" : "is-photo") + '" aria-hidden="' + (n ? "true" : "false") + '">' + inner + "</figure>";
+        }).join("") + "</div>" +
+        '<button class="gal-btn gal-prev" type="button" aria-label="Previous">&lsaquo;</button>' +
+        '<button class="gal-btn gal-next" type="button" aria-label="Next">&rsaquo;</button>' +
+      "</div>" +
+      '<div class="gal-bar"><p class="gal-cap" aria-live="polite"></p><div class="gal-dots">' +
+        items.map(function (p, n) { return '<button type="button" aria-label="Go to item ' + (n + 1) + '"></button>'; }).join("") +
+      "</div></div>";
+    var slides = box.querySelectorAll(".gal-slide"), dots = box.querySelectorAll(".gal-dots button"), cap = box.querySelector(".gal-cap");
+    function go(n) {
+      i = (n + items.length) % items.length;
+      Array.prototype.forEach.call(slides, function (s, k) { s.classList.toggle("on", k === i); s.setAttribute("aria-hidden", k === i ? "false" : "true"); });
+      Array.prototype.forEach.call(dots, function (d, k) { d.classList.toggle("on", k === i); d.setAttribute("aria-current", k === i ? "true" : "false"); });
+      cap.textContent = items[i].caption || "";
+    }
+    function start() { if (!reduce && !timer) timer = setInterval(function () { go(i + 1); }, 6000); }
+    function stop() { clearInterval(timer); timer = null; }
+    box.querySelector(".gal-prev").addEventListener("click", function () { go(i - 1); });
+    box.querySelector(".gal-next").addEventListener("click", function () { go(i + 1); });
+    Array.prototype.forEach.call(dots, function (d, k) { d.addEventListener("click", function () { go(k); }); });
+    box.addEventListener("mouseenter", stop); box.addEventListener("mouseleave", start);
+    box.addEventListener("focusin", stop); box.addEventListener("focusout", start);
+    var x0 = null;
+    box.addEventListener("touchstart", function (e) { x0 = e.touches[0].clientX; stop(); }, { passive: true });
+    box.addEventListener("touchend", function (e) { if (x0 != null) { var dx = e.changedTouches[0].clientX - x0; if (Math.abs(dx) > 40) go(i + (dx < 0 ? 1 : -1)); } x0 = null; }, { passive: true });
+    go(0); start();
+  }
+
   function boot() {
     if (S.draft) document.body.classList.add("draft");
 
@@ -192,6 +233,7 @@
     });
     // Announcements: <div data-announcements data-limit="3">
     Array.prototype.forEach.call(document.querySelectorAll("[data-announcements]"), loadAnnouncements);
+    Array.prototype.forEach.call(document.querySelectorAll("[data-gallery]"), buildGallery);
     // Calendar embed: <div data-calendar> keeps its placeholder until calendarEmbedUrl is set
     var cal = document.querySelector("[data-calendar]");
     if (cal && S.calendarEmbedUrl) {

@@ -62,6 +62,17 @@ window.SITE = {
     }
   },
 
+  // Rotating photos and posters on the home page (TEMPORARY test list; later fed from the Member Center picker).
+  // type: "photo" fills the frame; "poster" shows the whole image. link is optional.
+  photos: [
+    { src: "poster-sample.jpg", type: "poster", caption: "Stay for Breakfast: Sunday, January 10", link: "events.html" },
+    { src: "breakfast.jpg", type: "photo", caption: "Pancake breakfast" },
+    { src: "serving.jpg", type: "photo", caption: "Serving at a parish event" },
+    { src: "fishfry.jpg", type: "photo", caption: "Lenten fish fry" },
+    { src: "coats.jpg", type: "photo", caption: "Coats for Kids" },
+    { src: "faith.jpg", type: "photo", caption: "Faith at St. Luke" }
+  ],
+
   // Latest news (newest first). Add a url to link a headline somewhere.
   news: [
     { date: "2025-12-03", title: "November Quarterly Grand Knight Report", summary: "The Grand Knight's quarterly update to the council.", url: "" },
