@@ -277,3 +277,7 @@ body.draft .draft-only { display: block; }
 .gal-dots button.on::after { background: var(--navy); }
 @media (max-width: 600px) { .gal { aspect-ratio: 4/3; } .gal-btn { width: 40px; height: 40px; } }
 @media (prefers-reduced-motion: reduce) { .gal-slide { transition: none; } }
+
+.announce-type { margin: 0 0 6px; font-size: .78rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--bronze); }
+.announce-next { border-left-color: var(--navy); background: #FBF6E8; }
+.announce-item > p { font-size: 1.05rem; }

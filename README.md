@@ -41,10 +41,10 @@ Open `config.js`. Change the text between the quotes and save.
 - **Meeting time and place, rosary time:** `meeting`, `meetingPlace`, `rosary`. Meetings are for members, so the public pages no longer show these.
 - **Role emails:** `emailGrandKnight`, `emailMembership`, `emailFinancialSecretary`. Create these as Google Groups on kofc14895.org before launch.
 - **Join page referral code:** `referralCode`. Confirm it is council-wide before publishing it.
-- **Announcements (home page and News):** read live from the Member Center's Google Sheet. In `config.js` set `announcements.sheetId` (the long code in the sheet's address) and `tab`. In the Member Center's announcements tab add a column named **Show on Public Site** and type Yes on the rows that may appear here. Column names are set under `announcements.columns`. Note: anyone who knows the sheet ID can read the whole tab, so keep anything truly private out of it.
+- **Announcements (home page and News):** read live from the Member Center's Google Sheet, Announcements tab. A row appears only if **Public Site?** says Yes, today is on or after **Show From**, and today is on or before **Show Through** (blank dates mean no limit). **Type** shows as a small label, **Message** is the text, and **Link** adds a "More" button. Column names are set under `announcements.columns` in `config.js`. The home page always lists the next event first, from `upcomingTitle`, `upcomingWhen`, `upcomingDetail`, `upcomingNote` and `upcomingDate`, and drops it after that date. Anyone who knows the sheet ID can read the whole tab, so keep anything truly private out of it.
 - **Live calendar:** paste the Google Calendar embed address into `calendarEmbedUrl`.
 - **News:** add an entry at the top of `news`.
-- **"Coming up next" strip on the home page:** `upcomingTitle`, `upcomingWhen`, `upcomingDetail`, `upcomingNote`. Update it after each event.
+- **Next event (first announcement on the home page):** `upcomingTitle`, `upcomingWhen`, `upcomingDetail`, `upcomingNote`. Update it after each event.
 
 Text inside the page files that still shows [brackets] (officer names, event dates, dues amount) is edited in the page itself.
 

@@ -40,8 +40,9 @@ window.SITE = {
 
   duesAmount: "[dues amount]",
 
-  // "Coming up next" strip on the home page
+  // "Next event": always the first announcement on the home page (until the Events feed replaces this)
   upcomingTitle: "Stay for Breakfast!",
+  upcomingDate: "2027-01-10",      // ISO date; the next-event card hides itself after this day
   upcomingWhen: "Sunday, January 10, 2027",
   upcomingDetail: "After the 7:30 and 9:30 Masses · School cafeteria",
   upcomingNote: "Bring the family. Everyone is welcome; freewill offering.",
@@ -50,28 +51,19 @@ window.SITE = {
   // Only rows whose "Show on Public Site" cell says Yes are shown here.
   // Leave sheetId blank and the section stays a placeholder (draft) or hidden (live).
   announcements: {
-    sheetId: "",                    // the Member Center sheet's ID (long code in its address)
-    tab: "Announcements",           // the tab name that holds announcements
-    limit: 3,                       // how many to show on the home page
+    sheetId: "1TPuMPjpACtOOeW2uJd8t2ZN3AkMVoKPnKV8gEOKLjLQ", // the Member Center sheet
+    gid: "1133674898",              // the Announcements tab (from the address bar: gid=...)
+    tab: "Announcements",           // used only if gid is blank
+    limit: 3,                       // how many sheet announcements to show on the home page
     columns: {                      // header names in the sheet (not case sensitive)
-      date: "Date",
-      title: "Title",
+      type: "Type",                 // shown as a small label, e.g. Event, Reminder
       message: "Message",
       link: "Link",                 // optional
-      show: "Show on Public Site"   // the new column: Yes / No
+      show: "Public Site?",         // Yes = may appear on this site
+      from: "Show From",            // optional: hidden before this date
+      through: "Show Through"       // optional: hidden after this date
     }
   },
-
-  // Rotating photos and posters on the home page (TEMPORARY test list; later fed from the Member Center picker).
-  // type: "photo" fills the frame; "poster" shows the whole image. link is optional.
-  photos: [
-    { src: "poster-sample.jpg", type: "poster", caption: "Stay for Breakfast: Sunday, January 10", link: "events.html" },
-    { src: "breakfast.jpg", type: "photo", caption: "Pancake breakfast" },
-    { src: "serving.jpg", type: "photo", caption: "Serving at a parish event" },
-    { src: "fishfry.jpg", type: "photo", caption: "Lenten fish fry" },
-    { src: "coats.jpg", type: "photo", caption: "Coats for Kids" },
-    { src: "faith.jpg", type: "photo", caption: "Faith at St. Luke" }
-  ],
 
   // Latest news (newest first). Add a url to link a headline somewhere.
   news: [
