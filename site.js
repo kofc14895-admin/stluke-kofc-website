@@ -9,10 +9,7 @@
     ["About", "about.html"],
     ["What We Do", "what-we-do.html"],
     ["Events", "events.html"],
-    ["Volunteer", "volunteer.html"],
-    ["Join Us", "join.html"],
-    ["Support Us", "support.html"],
-    ["Contact", "contact.html"]
+    ["Join Us", "join.html"]
   ];
 
   function esc(s) {

@@ -7,7 +7,7 @@ It works on GitHub Pages the same way the Member Center does.
 
 | File | What it is |
 |---|---|
-| `index.html`, `about.html`, `what-we-do.html`, `events.html`, `volunteer.html`, `news.html`, `join.html`, `support.html`, `members.html`, `contact.html`, `404.html` | The pages |
+| `index.html`, `about.html`, `what-we-do.html`, `events.html`, `news.html`, `join.html`, `support.html`, `members.html`, `404.html` | The pages |
 | `config.js` | **Every setting in one place**: meeting time, emails, links, news, Square shop address |
 | `site.js` | Builds the shared header and footer on every page and fills in values from `config.js` |
 | `site.css` | All styling (navy, gold and cream, to match the recruiting brochure) |
@@ -66,3 +66,6 @@ When stlukekofc.org is ready to move: add a file named `CNAME` containing `stluk
 - Sign-in never happens on this site. The Members page only links to the Member Center.
 - No member data is stored here. Keep it that way: sheet IDs, tokens and member lists do not belong in this repository.
 - The Join form opens the visitor's email app with a prepared message to the Membership Director. It does not send or store anything.
+
+- Hidden for now: **Support Us** (`support.html` is still in the folder but not linked; dues are paid through the Member Center). To bring it back, add `["Support Us", "support.html"]` to the menu list in `site.js`.
+- Removed: the Volunteer and Contact pages. Volunteering goes through membership, and contact addresses are in the footer.

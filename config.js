@@ -30,7 +30,7 @@ window.SITE = {
   memberCenterUrl: "https://members.kofc14895.org/",
   squareShopUrl: "https://knights-of-columbus-14895.square.site/", // placeholder: points at the council's Square store
   kofcJoinUrl: "https://www.kofc.org/join",
-  referralCode: "[referral code]",
+  referralCode: "2113492",
   parishUrl: "https://www.stluke.org/",
   stateUrl: "https://indianakofc.org/",
   supremeUrl: "https://www.kofc.org/",
