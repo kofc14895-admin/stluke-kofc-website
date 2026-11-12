@@ -117,11 +117,15 @@
   function loadAnnouncements(box) {
     var A = S.announcements || {}, cols = A.columns || {};
     var limit = parseInt(box.getAttribute("data-limit"), 10) || A.limit || 3;
-    var pinned = box.hasAttribute("data-next-event") ? nextEventHtml() : "";
+    var wantNext = box.hasAttribute("data-next-event");
     var section = box.closest("section");
     var done = false;
     function show(items, failed) {
       if (done) return; done = true;
+      if (!wantNext) { render(items, failed, ""); return; }
+      getEvents(function (ev) { render(items, failed, ev && ev.next && ev.next.length ? nextCardHtml(ev.next) : nextEventHtml()); });
+    }
+    function render(items, failed, pinned) {
       var html = pinned + annHtml(items, limit);
       if (!html && S.draft) {
         html = '<div class="placeholder-box"><p style="margin:0"><strong>No announcements to show right now.</strong> ' +
@@ -163,6 +167,115 @@
       "/gviz/tq?tqx=out:json;responseHandler:" + cb + "&headers=1&" +
       (A.gid ? "gid=" + encodeURIComponent(A.gid) : "sheet=" + encodeURIComponent(A.tab || "Announcements"));
     document.head.appendChild(s);
+  }
+
+
+  // ---- Events: live from the Activity List sheet (gviz JSONP), shared by the Events page and the home page ----
+  var MONTHS = ["january","february","march","april","may","june","july","august","september","october","november","december"];
+  function parseEventDate(cell) {
+    if (!cell || cell.v == null || cell.v === "") return null;
+    var v = String(cell.v), m = /^Date\((\d+),(\d+),(\d+)/.exec(v);
+    if (m) return new Date(+m[1], +m[2], +m[3]);
+    m = /([A-Za-z]+)\.?\s+(\d{1,2}),?\s+(\d{4})/.exec(v);
+    if (m) { var mi = MONTHS.indexOf(m[1].toLowerCase()); if (mi < 0) mi = MONTHS.indexOf(({jan:"january",feb:"february",mar:"march",apr:"april",jun:"june",jul:"july",aug:"august",sep:"september",sept:"september",oct:"october",nov:"november",dec:"december"})[m[1].toLowerCase()] || ""); if (mi >= 0) return new Date(+m[3], mi, +m[2]); }
+    return null;
+  }
+  function tidyTitle(t) {
+    t = String(t || "").trim();
+    if (t && t === t.toUpperCase() && /[A-Z]{3}/.test(t)) {
+      t = t.replace(/[A-Z]+/g, function (w) { return w.charAt(0) + w.slice(1).toLowerCase(); }).replace(/(\d)\s?(Am|Pm)\b/g, function (x, d, ap) { return d + " " + ap.toUpperCase(); });
+    }
+    return t;
+  }
+  var evCache = null, evWaiting = [];
+  function getEvents(cb) {
+    if (evCache) { cb(evCache.ok ? evCache : null); return; }
+    evWaiting.push(cb);
+    if (evWaiting.length > 1) return;
+    var E = S.events || {}, cols = E.columns || {};
+    function finish(res) {
+      evCache = res; var w = evWaiting; evWaiting = [];
+      w.forEach(function (f) { f(res.ok ? res : null); });
+    }
+    if (!E.sheetId) { finish({ ok: false }); return; }
+    var cb2 = "__evCb" + Date.now();
+    var timer = setTimeout(function () { finish({ ok: false }); }, 20000);
+    window[cb2] = function (r) {
+      clearTimeout(timer);
+      try {
+        if (r.status && r.status !== "ok") throw new Error("gviz");
+        var labels = (r.table.cols || []).map(function (c) { return String(c.label || "").trim().toLowerCase(); });
+        var idx = function (n) { return labels.indexOf(String(n || "").trim().toLowerCase()); };
+        var iD = idx(cols.date), iT = idx(cols.title), iY = idx(cols.type), iX = idx(cols.description), iS = idx(cols.show);
+        if (iS < 0 || iT < 0) throw new Error("columns");
+        var today = new Date(); today = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+        var pastCut = new Date(+today - (E.pastDays || 60) * 86400000);
+        var all = [];
+        (r.table.rows || []).forEach(function (row) {
+          var c = row.c || [];
+          var val = function (i) { return i >= 0 && c[i] && c[i].v != null ? String(c[i].v) : ""; };
+          if (!truthy(val(iS)) || !val(iT).trim()) return;
+          all.push({ date: iD >= 0 ? parseEventDate(c[iD]) : null, title: tidyTitle(val(iT)), type: val(iY).trim(), desc: val(iX).trim() });
+        });
+        var dated = all.filter(function (e) { return e.date; }).sort(function (a, b) { return a.date - b.date; });
+        var res = {
+          ok: true,
+          upcoming: dated.filter(function (e) { return e.date >= today; }),
+          recent: dated.filter(function (e) { return e.date < today && e.date >= pastCut; }).reverse(),
+          tbd: all.filter(function (e) { return !e.date; })
+        };
+        var first = res.upcoming[0];
+        res.next = first ? res.upcoming.filter(function (e) { return e.date.getTime() === first.date.getTime(); }).slice(0, 2) : [];
+        finish(res);
+      } catch (e) { finish({ ok: false }); }
+    };
+    var s = document.createElement("script");
+    s.onerror = function () { clearTimeout(timer); finish({ ok: false }); };
+    s.src = "https://docs.google.com/spreadsheets/d/" + encodeURIComponent(E.sheetId) + "/gviz/tq?tqx=out:json;responseHandler:" + cb2 +
+      "&headers=1&" + (E.gid ? "gid=" + encodeURIComponent(E.gid) : "sheet=" + encodeURIComponent(E.tab || ""));
+    document.head.appendChild(s);
+  }
+  function shortDate(d) { return d.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" }); }
+  function eventCard(e) {
+    return '<article class="event-card"><div class="event-date"><span>' + esc(d2(e.date, "month")) + "</span><strong>" + e.date.getDate() + "</strong><span>" + esc(d2(e.date, "weekday")) + "</span></div>" +
+      '<div class="event-body">' + (e.type ? '<p class="announce-type">' + esc(e.type) + "</p>" : "") +
+      '<h3 class="news-title">' + esc(e.title) + "</h3>" + (e.desc ? "<p>" + esc(e.desc).replace(/\n/g, "<br>") + "</p>" : "") + "</div></article>";
+  }
+  function d2(d, kind) { return d.toLocaleDateString("en-US", kind === "month" ? { month: "short" } : { weekday: "short" }); }
+  function nextCardHtml(list) {
+    return list.map(function (e) {
+      return '<article class="announce-item announce-next"><p class="announce-type">Next event' + (e.type ? " &middot; " + esc(e.type) : "") + "</p>" +
+        '<h3 class="news-title">' + esc(e.title) + "</h3><p><strong>" + esc(e.date.toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric", year: "numeric" })) + "</strong></p>" +
+        (e.desc ? "<p>" + esc(e.desc) + "</p>" : "") + '<p><a class="text-link" href="events.html">All events &rarr;</a></p></article>';
+    }).join("");
+  }
+  function buildEvents(box) {
+    getEvents(function (ev) {
+      if (!ev) {
+        box.innerHTML = '<div class="placeholder-box"><p style="margin:0"><strong>Our events will appear here.</strong>' +
+          (S.draft ? " Draft note: the Activity List could not be read. Check the sheet ID in <code>config.js</code> and that the sheet can be viewed without signing in." : " Please check back soon.") + "</p></div>";
+        return;
+      }
+      var html = "", cur = "";
+      ev.upcoming.forEach(function (e) {
+        var m = e.date.toLocaleDateString("en-US", { month: "long", year: "numeric" });
+        if (m !== cur) { if (cur) html += "</div>"; html += '<h2 class="event-month">' + esc(m) + '</h2><div class="event-list">'; cur = m; }
+        html += eventCard(e);
+      });
+      if (cur) html += "</div>";
+      if (!ev.upcoming.length) html += '<p class="section-lead">No upcoming events are posted yet. Please check back soon.</p>';
+      if (ev.tbd.length) {
+        html += '<h2 class="event-month">Dates to be announced</h2><ul class="tbd-list">' + ev.tbd.map(function (e) {
+          return "<li><strong>" + esc(e.title) + "</strong>" + (e.desc ? " &mdash; " + esc(e.desc) : "") + "</li>";
+        }).join("") + "</ul>";
+      }
+      if (ev.recent.length) {
+        html += '<h2 class="event-month">Recently</h2><ul class="tbd-list">' + ev.recent.map(function (e) {
+          return "<li><strong>" + esc(e.title) + "</strong> &middot; " + esc(shortDate(e.date)) + "</li>";
+        }).join("") + "</ul>";
+      }
+      box.innerHTML = html;
+    });
   }
 
   // ---- Photo carousel: <div data-gallery> reads SITE.photos ----
@@ -251,6 +364,7 @@
     // Announcements: <div data-announcements data-limit="3">
     Array.prototype.forEach.call(document.querySelectorAll("[data-announcements]"), loadAnnouncements);
     Array.prototype.forEach.call(document.querySelectorAll("[data-gallery]"), buildGallery);
+    Array.prototype.forEach.call(document.querySelectorAll("[data-events]"), buildEvents);
     // Calendar embed: <div data-calendar> keeps its placeholder until calendarEmbedUrl is set
     var cal = document.querySelector("[data-calendar]");
     if (cal && S.calendarEmbedUrl) {
