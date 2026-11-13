@@ -97,9 +97,11 @@ window.SITE = {
     { src: "faith.jpg", type: "photo", caption: "Faith at St. Luke" }
   ],
 
-  // Latest news (newest first). Add a url to link a headline somewhere.
-  news: [
-    { date: "2025-12-03", title: "November Quarterly Grand Knight Report", summary: "The Grand Knight's quarterly update to the council.", url: "" },
-    { date: "2025-08-21", title: "Grillin' Knights", summary: "The St. Luke Fall Festival and how Knights can help.", url: "" }
-  ]
+  // Reports shown on the News page: PDFs added in the Member Center ("Website reports" page),
+  // listed on the "Website Reports" tab of the same workbook as the Announcements.
+  reports: {
+    sheetId: "1TPuMPjpACtOOeW2uJd8t2ZN3AkMVoKPnKV8gEOKLjLQ",
+    tab: "Website Reports",
+    limit: 30
+  }
 };

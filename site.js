@@ -84,6 +84,43 @@
   }
 
 
+  // ---- Reports: PDFs listed on the "Website Reports" tab (gviz JSONP), newest first ----
+  // Columns: Report ID, Title, Summary, Report Date, Public Site?
+  function loadReports(box) {
+    var R = S.reports;
+    if (!R || !R.sheetId) { box.innerHTML = "<p>No reports yet.</p>"; return; }
+    var cb = "__repCb" + Date.now(), finished = false;
+    function show(html) { if (finished) return; finished = true; clearTimeout(timer); box.innerHTML = html; }
+    var timer = setTimeout(function () { show("<p>Reports could not be loaded just now. Please try again later.</p>"); }, 20000);
+    window[cb] = function (r) {
+      try {
+        if (r.status && r.status !== "ok") throw new Error("gviz");
+        var list = [];
+        (r.table.rows || []).forEach(function (row) {
+          var c = row.c || [], v = function (i) { return c[i] && c[i].v != null ? c[i].v : ""; };
+          var id = String(v(0)).trim();
+          if (!id || !truthy(v(4))) return;
+          var d = cellDate(c[3]);
+          list.push({ id: id, title: String(v(1)), summary: String(v(2)), date: d });
+        });
+        list.sort(function (a, b) { return (b.date ? b.date.getTime() : 0) - (a.date ? a.date.getTime() : 0); });
+        list = list.slice(0, R.limit || 30);
+        if (!list.length) { show(S.draft ? '<p class="figure-note">[Reports will appear here once the first one is added.]</p>' : "<p>No reports yet.</p>"); return; }
+        show(list.map(function (n) {
+          var iso = n.date ? n.date.getFullYear() + "-" + ("0" + (n.date.getMonth() + 1)).slice(-2) + "-" + ("0" + n.date.getDate()).slice(-2) : "";
+          return '<article class="news-item">' + (iso ? '<p class="news-date">' + esc(fmtDate(iso)) + "</p>" : "") +
+            '<h3 class="news-title"><a href="https://drive.google.com/file/d/' + encodeURIComponent(n.id) + '/view" target="_blank" rel="noopener">' + esc(n.title) + '</a> <span class="pdf-tag">PDF</span></h3>' +
+            (n.summary ? "<p>" + esc(n.summary) + "</p>" : "") + "</article>";
+        }).join(""));
+      } catch (e) { show("<p>Reports could not be loaded just now. Please try again later.</p>"); }
+    };
+    var s = document.createElement("script");
+    s.onerror = function () { show("<p>Reports could not be loaded just now. Please try again later.</p>"); };
+    s.src = "https://docs.google.com/spreadsheets/d/" + encodeURIComponent(R.sheetId) +
+      "/gviz/tq?tqx=out:json;responseHandler:" + cb + "&headers=1&sheet=" + encodeURIComponent(R.tab || "Website Reports");
+    document.head.appendChild(s);
+  }
+
   // ---- Announcements: live from the Member Center's Google Sheet (gviz JSONP) ----
   function truthy(v) {
     if (v === true) return true;
@@ -408,6 +445,8 @@
     Array.prototype.forEach.call(document.querySelectorAll("[data-news]"), function (el) {
       el.innerHTML = newsHtml(parseInt(el.getAttribute("data-news"), 10) || 99);
     });
+    // Reports: <div data-reports>
+    Array.prototype.forEach.call(document.querySelectorAll("[data-reports]"), loadReports);
     // Announcements: <div data-announcements data-limit="3">
     Array.prototype.forEach.call(document.querySelectorAll("[data-announcements]"), loadAnnouncements);
     Array.prototype.forEach.call(document.querySelectorAll("[data-gallery]"), buildGallery);
