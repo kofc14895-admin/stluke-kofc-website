@@ -27,23 +27,21 @@
   function header() {
     var links = NAV.map(function (n) {
       var current = n[1].toLowerCase() === here || (here === "" && n[1] === "index.html");
-      return '<li><a href="' + n[1] + '"' + (current ? ' aria-current="page"' : "") + ">" + esc(n[0]) + "</a></li>";
+      return '<li' + (n[1] === "index.html" ? ' class="nav-home"' : "") + '><a href="' + n[1] + '"' + (current ? ' aria-current="page"' : "") + ">" + esc(n[0]) + "</a></li>";
     }).join("");
+
+    // Member sign-in is the last item in the menu, set apart on the far right
+    links += '<li class="nav-member"><a href="members.html"' + (here === "members.html" ? ' aria-current="page"' : "") + '><span class="nm-long">Member sign-in</span><span class="nm-short">Sign in</span></a></li>';
 
     var banner = S.draft
       ? '<div class="draft-banner" role="note">Draft for review. Items in [brackets] or marked &ldquo;to confirm&rdquo; are not final.</div>'
       : "";
 
     return banner +
-      '<div class="topbar"><div class="container topbar-inner">' +
-        "<span>Council #" + esc(S.councilNumber) + " &middot; " + esc(S.parishName) + ", Indianapolis</span>" +
-        '<a class="btn btn-gold btn-sm" href="members.html">Member sign-in</a>' +
-      "</div></div>" +
       '<header class="site-header"><div class="container header-inner">' +
         '<a class="brand" href="index.html"><img class="brand-logo" src="logo.png" width="46" height="46" alt="">' +
           '<span class="brand-text"><span class="brand-name">' + esc(S.councilName) + "</span>" +
           '<span class="brand-sub">COUNCIL #' + esc(S.councilNumber) + "</span></span></a>" +
-        '<button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">Menu</button>' +
         '<nav id="site-nav" class="site-nav" aria-label="Main"><ul>' + links + "</ul></nav>" +
       "</div></header>";
   }
