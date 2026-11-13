@@ -9,6 +9,9 @@ window.SITE = {
   draft: true,
 
   councilName: "St. Luke Knights of Columbus",
+  brandLine1: "St. Luke the Evangelist",     // header lockup, line 1
+  brandLine2: "Knights of Columbus",          // header lockup, line 2
+  brandSub: "Indianapolis, Indiana \u00b7 Council 14895",
   councilNumber: "14895",
   parishName: "St. Luke Catholic Church",
   address1: "7575 Holliday Drive East",

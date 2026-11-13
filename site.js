@@ -39,9 +39,11 @@
 
     return banner +
       '<header class="site-header"><div class="container header-inner">' +
-        '<a class="brand" href="index.html"><img class="brand-logo" src="logo.png" width="46" height="46" alt="">' +
-          '<span class="brand-text"><span class="brand-name">' + esc(S.councilName) + "</span>" +
-          '<span class="brand-sub">COUNCIL #' + esc(S.councilNumber) + "</span></span></a>" +
+        '<a class="brand" href="index.html" aria-label="' + esc(S.councilName) + ', Council #' + esc(S.councilNumber) + '">' +
+          '<span class="brand-text"><span class="brand-name"><span>' + esc(S.brandLine1 || "St. Luke the Evangelist") + "</span><span>" + esc(S.brandLine2 || "Knights of Columbus") + "</span></span>" +
+          '<span class="brand-sub">' + esc(S.brandSub || ("Indianapolis, Indiana \u00b7 Council " + S.councilNumber)) + "</span></span>" +
+          '<img class="brand-degree" src="degree.png" width="25" height="40" alt="">' +
+          '<img class="brand-logo" src="logo.png" width="46" height="46" alt=""></a>' +
         '<nav id="site-nav" class="site-nav" aria-label="Main"><ul>' + links + "</ul></nav>" +
       "</div></header>";
   }
