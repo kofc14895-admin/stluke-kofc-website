@@ -312,3 +312,28 @@ body.draft .draft-only { display: block; }
 @media (max-width: 600px) { .topbar-inner > span { display: none; } .topbar-inner { justify-content: flex-end; } .topbar .btn-sm { min-height: 36px; padding: 0 14px; } }
 
 @media (max-width: 480px) { .site-nav .nav-home { display: none; } }
+
+/* Compact spacing: tighter gaps between and inside content blocks (desktop, then phones) */
+.page-hero .container { padding-top: 34px; padding-bottom: 28px; }
+.section { padding: 38px 0; }
+.section-head { margin-bottom: 16px; }
+.section-lead { margin-bottom: 10px; }
+.band { padding: 28px 32px; }
+.banner-img { height: 300px; }
+.pillar-block { margin-top: 30px; }
+.pillar-cards, .why-grid, .impact { margin-top: 18px; }
+.announce-list { margin-top: 16px; gap: 12px; }
+.announce-item { padding: 16px 22px; }
+.footer-grid { padding-top: 34px; padding-bottom: 14px; }
+.footer-legal { padding-bottom: 22px; }
+@media (max-width: 700px) {
+  .page-hero .container { padding-top: 24px; padding-bottom: 20px; }
+  .section { padding: 26px 0; }
+  .band { padding: 22px 20px; }
+  .banner-img { height: 190px; }
+  .pillar-block { margin-top: 24px; }
+  .lead { font-size: 19px; }
+  .announce-item { padding: 14px 16px; }
+}
+h1, h2 { text-wrap: balance; }
+@media (max-width: 600px) { .why-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; } .why-grid article { padding: 14px; } .why-grid h3 { font-size: 1.15rem; } .why-grid p { font-size: .95rem; } }
