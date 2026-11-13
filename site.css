@@ -311,7 +311,7 @@ body.draft .draft-only { display: block; }
 @media (max-width: 600px) { .event-card { gap: 14px; padding: 14px; } .event-date { flex-basis: 58px; } }
 @media (max-width: 600px) { .topbar-inner > span { display: none; } .topbar-inner { justify-content: flex-end; } .topbar .btn-sm { min-height: 36px; padding: 0 14px; } }
 
-@media (max-width: 480px) { .site-nav .nav-home { display: none; } }
+@media (max-width: 480px) { .site-nav a { font-size: 13.5px; padding: 12px 6px; } .site-nav .nav-member { margin-left: 0; padding-left: 0; border-left: 0; } .site-nav ul { padding: 0 6px; justify-content: space-between; } }
 
 /* Compact spacing: tighter gaps between and inside content blocks (desktop, then phones) */
 .page-hero .container { padding-top: 34px; padding-bottom: 28px; }
@@ -351,3 +351,4 @@ h1, h2 { text-wrap: balance; }
 @media (max-width: 700px) { .who { padding: 22px 0; } .who-lead { font-size: 18.5px; text-align: left; } }
 .pdf-tag { display: inline-block; vertical-align: middle; font: 700 11px var(--sans); letter-spacing: .08em; color: var(--bronze); border: 1px solid var(--bronze); border-radius: 4px; padding: 1px 5px; margin-left: 4px; }
 @media (min-width: 821px) and (max-width: 1180px) { .brand-name { font-size: 18px; } .brand-sub { font-size: 11px; } .brand-logo { width: 40px; height: 40px; } .brand-degree { width: 21px; height: 34px; } .brand { gap: 9px; } .site-nav a { padding: 0 11px; font-size: 15px; } .site-nav .nav-member { margin-left: 4px; padding-left: 4px; } }
+@media (max-width: 380px) { .site-nav a { font-size: 12.5px; padding: 12px 4px; } }
