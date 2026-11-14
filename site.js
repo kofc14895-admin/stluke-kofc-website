@@ -341,7 +341,7 @@
           if (link && !/^(https:\/\/|[a-z0-9\-]+\.html$)/i.test(link)) link = "";
           var ord = v(7) === "" ? NaN : Number(v(7));
           out.push({ src: "https://drive.google.com/thumbnail?id=" + encodeURIComponent(id) + "&sz=w1400",
-                     type: /poster/i.test(String(v(2))) ? "poster" : "photo", caption: String(v(1)), link: link,
+                     type: /poster/i.test(String(v(2))) ? "poster" : "photo", caption: String(v(1)), link: link, second: String(v(10)).trim(),
                      order: isNaN(ord) ? 1e9 : ord, from: from ? from.getTime() : 0 });
         });
         out.sort(function (a, b) { return (a.order - b.order) || (b.from - a.from); });
@@ -374,10 +374,12 @@
         '<div class="gal-stage">' + items.map(function (p, n) {
           var img = '<img src="' + esc(p.src) + '" alt="' + esc(p.caption || "") + '"' + (n ? ' loading="lazy"' : "") + ">";
           var inner = p.link ? '<a href="' + esc(p.link) + '">' + img + "</a>" : img;
-          return '<figure class="gal-slide ' + (p.type === "poster" ? "is-poster" : "is-photo") + '" aria-hidden="' + (n ? "true" : "false") + '">' + inner + "</figure>";
+          var over = p.type !== "poster" && p.caption ? '<figcaption class="gal-over" aria-hidden="true"><span>' + esc(p.caption) + "</span>" + (p.second ? '<em>' + esc(p.second) + "</em>" : "") + "</figcaption>" : "";
+          return '<figure class="gal-slide ' + (p.type === "poster" ? "is-poster" : "is-photo") + '" aria-hidden="' + (n ? "true" : "false") + '">' + inner + over + "</figure>";
         }).join("") + "</div>" +
         '<button class="gal-btn gal-prev" type="button" aria-label="Previous">&lsaquo;</button>' +
         '<button class="gal-btn gal-next" type="button" aria-label="Next">&rsaquo;</button>' +
+        '<button class="gal-pause" type="button" aria-label="Pause slideshow">&#10074;&#10074;</button>' +
       "</div>" +
       '<div class="gal-bar"><p class="gal-cap" aria-live="polite"></p><div class="gal-dots">' +
         items.map(function (p, n) { return '<button type="button" aria-label="Go to item ' + (n + 1) + '"></button>'; }).join("") +
@@ -387,10 +389,19 @@
       i = (n + items.length) % items.length;
       Array.prototype.forEach.call(slides, function (s, k) { s.classList.toggle("on", k === i); s.setAttribute("aria-hidden", k === i ? "false" : "true"); });
       Array.prototype.forEach.call(dots, function (d, k) { d.classList.toggle("on", k === i); d.setAttribute("aria-current", k === i ? "true" : "false"); });
-      cap.textContent = items[i].caption || "";
+      cap.textContent = (items[i].caption || "") + (items[i].second ? ". " + items[i].second : "");
+      cap.classList.toggle("gal-cap-hide", items[i].type !== "poster" && !!items[i].caption);   // photos show the caption on the picture instead
     }
-    function start() { if (!reduce && !timer) timer = setInterval(function () { go(i + 1); }, 6000); }
+    var paused = false, pauseBtn = box.querySelector(".gal-pause");
+    function start() { if (!reduce && !paused && !timer) timer = setInterval(function () { go(i + 1); }, 6500); }
     function stop() { clearInterval(timer); timer = null; }
+    if (reduce) pauseBtn.hidden = true;
+    pauseBtn.addEventListener("click", function () {
+      paused = !paused;
+      pauseBtn.innerHTML = paused ? "&#9654;" : "&#10074;&#10074;";
+      pauseBtn.setAttribute("aria-label", paused ? "Play slideshow" : "Pause slideshow");
+      paused ? stop() : start();
+    });
     box.querySelector(".gal-prev").addEventListener("click", function () { go(i - 1); });
     box.querySelector(".gal-next").addEventListener("click", function () { go(i + 1); });
     Array.prototype.forEach.call(dots, function (d, k) { d.addEventListener("click", function () { go(k); }); });

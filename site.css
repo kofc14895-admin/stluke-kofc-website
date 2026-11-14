@@ -288,8 +288,19 @@ body.draft .draft-only { display: block; }
 .gal-dots button { width: 28px; height: 28px; border: 0; background: transparent; cursor: pointer; position: relative; padding: 0; }
 .gal-dots button::after { content: ""; position: absolute; inset: 9px; border-radius: 50%; background: #B9C3D6; }
 .gal-dots button.on::after { background: var(--navy); }
+/* Caption on the picture: fades and slides up a moment after the photo appears */
+.gal-over { position: absolute; left: 0; right: 0; bottom: 0; padding: 56px 64px 22px; background: linear-gradient(to top, rgba(14,36,86,.82), rgba(14,36,86,0)); color: #fff; pointer-events: none; opacity: 0; }
+.gal-over span { display: block; max-width: 760px; font-family: var(--serif, Georgia, serif); font-size: clamp(1.15rem, 3.4vw, 1.9rem); font-weight: 700; line-height: 1.2; text-shadow: 0 2px 8px rgba(0,0,0,.5); }
+.gal-over em { display: block; max-width: 760px; margin-top: 6px; font-style: normal; font-weight: 500; font-size: clamp(.9rem, 2.4vw, 1.15rem); line-height: 1.3; opacity: 0; text-shadow: 0 2px 6px rgba(0,0,0,.5); }
+.gal-slide.on .gal-over { animation: galCap .9s ease 1.2s both; }
+.gal-slide.on .gal-over em { animation: galCap .9s ease 2.1s both; }
+@keyframes galCap { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
+.gal-cap-hide { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.gal-pause { position: absolute; right: 12px; bottom: 12px; z-index: 2; width: 34px; height: 34px; border: 0; border-radius: 50%; background: rgba(255,255,255,.88); color: #0E2456; font-size: 12px; cursor: pointer; }
+.gal-pause:hover, .gal-pause:focus-visible { background: #fff; }
+@media (max-width: 600px) { .gal-over { padding: 40px 54px 16px; } }
 @media (max-width: 600px) { .gal-btn { width: 40px; height: 40px; } }
-@media (prefers-reduced-motion: reduce) { .gal-slide { transition: none; } }
+@media (prefers-reduced-motion: reduce) { .gal-slide { transition: none; } .gal-slide.on .gal-over { animation: none; opacity: 1; } .gal-slide.on .gal-over em { animation: none; opacity: 1; } }
 
 .announce-type { margin: 0 0 6px; font-size: .78rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--bronze); }
 .announce-next { border-left-color: var(--navy); background: #FBF6E8; }

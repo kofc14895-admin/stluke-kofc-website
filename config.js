@@ -92,7 +92,7 @@ window.SITE = {
     { src: "poster-sample.jpg", type: "poster", caption: "Stay for Breakfast: Sunday, January 10", link: "events.html" },
     { src: "breakfast.jpg", type: "photo", caption: "Pancake breakfast" },
     { src: "serving.jpg", type: "photo", caption: "Serving at a parish event" },
-    { src: "fishfry.jpg", type: "photo", caption: "Lenten fish fry" },
+    { src: "fishfry.jpg", type: "photo", caption: "Lenten fish fry", second: "Fridays in Lent, 5 to 7 pm" },
     { src: "coats.jpg", type: "photo", caption: "Coats for Kids" },
     { src: "faith.jpg", type: "photo", caption: "Faith at St. Luke" }
   ],
