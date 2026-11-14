@@ -370,3 +370,32 @@ h1, h2 { text-wrap: balance; }
 .donate-row p:last-of-type { margin: 0; color: #3A4658; }
 .donate-row h2 { margin-bottom: 8px; }
 .who .eyebrow { margin-bottom: 8px; }
+
+/* Pay and Give concept demo */
+.demo-bar { background: #1E3A8A; color: #fff; text-align: center; padding: 10px 16px; font-size: 15px; }
+.pay-steps { list-style: none; margin: 0 0 28px; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; }
+.pay-steps li { background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; display: flex; gap: 12px; font-size: 16px; line-height: 1.45; }
+.pay-steps .n { flex: 0 0 30px; height: 30px; border-radius: 50%; background: var(--navy); color: #fff; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+.pay-layout { display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 32px; align-items: start; }
+.pay-items h2 { font-size: 28px; margin: 28px 0 4px; } .pay-items h2:first-child { margin-top: 0; }
+.pay-sub { color: var(--muted); font-size: 16px; margin: 0 0 14px; }
+.pay-card { background: #fff; border: 1px solid var(--line); border-top: 4px solid var(--gold); border-radius: 12px; padding: 18px 20px; margin-bottom: 14px; }
+.pay-card p { margin: 6px 0 10px; font-size: 16px; }
+.pay-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+.pay-head h3 { margin: 0; font-size: 20px; } .pay-price { font-weight: 700; font-size: 20px; color: var(--navy); white-space: nowrap; }
+.pay-card .pay-when { font-weight: 700; color: var(--bronze); font-size: 14.5px; }
+.pay-chips { border: 0; padding: 0; margin: 12px 0; display: flex; flex-wrap: wrap; gap: 8px; }
+.pay-chips legend { font: 700 12.5px var(--sans); letter-spacing: .08em; text-transform: uppercase; color: #4B5563; padding: 0; margin-bottom: 8px; width: 100%; }
+.pay-chips input { position: absolute; opacity: 0; } .pay-chips label { position: relative; }
+.pay-chips span { display: inline-block; border: 1.5px solid #C9CDD6; border-radius: 999px; padding: 8px 15px; font-weight: 600; font-size: 15px; cursor: pointer; background: #fff; }
+.pay-chips input:checked + span { background: var(--navy); border-color: var(--navy); color: #fff; }
+.pay-chips input:focus-visible + span { outline: 3px solid var(--gold); outline-offset: 2px; }
+.pay-other { margin: 0 0 12px; } .pay-other label { display: block; font-weight: 600; margin-bottom: 4px; } .pay-other input { font: inherit; padding: 9px 12px; border: 1.5px solid #C9CDD6; border-radius: 8px; width: 160px; }
+.pay-cart { position: sticky; top: 16px; background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 18px 20px; }
+.pay-cart h2 { font-size: 24px; margin: 0 0 8px; } .pay-cart h3 { font-size: 17px; margin: 14px 0 4px; } .pay-cart p { margin: 0 0 8px; font-size: 15.5px; } .pay-cart hr { border: 0; border-top: 1px solid var(--line); margin: 16px 0 2px; }
+.pay-lines { list-style: none; margin: 0 0 10px; padding: 0; } .pay-lines li { display: flex; justify-content: space-between; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--line); font-size: 15.5px; }
+.pay-x { background: none; border: 0; color: var(--navy); text-decoration: underline; cursor: pointer; font: inherit; font-size: 13.5px; padding: 0 0 0 6px; }
+.pay-total { display: flex; justify-content: space-between; font-size: 18px; margin-bottom: 12px; }
+.pay-check { width: 100%; } .pay-check[disabled] { opacity: .5; cursor: not-allowed; }
+.pay-demo-note { margin-top: 10px !important; color: var(--bronze); font-weight: 600; }
+@media (max-width: 900px) { .pay-layout { grid-template-columns: 1fr; } .pay-cart { position: static; } }

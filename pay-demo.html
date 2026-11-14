@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Pay and Give: Concept Demo | St. Luke Knights of Columbus</title>
+<link rel="icon" href="favicon.png" type="image/png">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;1,600&family=Source+Sans+3:wght@400;600;700&display=swap">
+<link rel="stylesheet" href="site.css">
+<script src="config.js" defer></script>
+<script src="site.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<div id="site-top"></div>
+
+<main id="main">
+
+<div class="demo-bar" role="note"><strong>Concept demo.</strong> This page shows how online payments could look and work. Nothing here takes a payment. Dates and some details are placeholders.</div>
+
+<section class="page-hero">
+<div class="container">
+<p class="eyebrow">Online payments</p>
+<h1>Pay dues, enter an event, or give.</h1>
+<p class="lead">Payments are processed securely by Square, and you receive a receipt by email. You don&rsquo;t need a Square account.</p>
+</div>
+</section>
+
+<section class="section">
+<div class="container">
+<ol class="pay-steps">
+<li><span class="n">1</span><div><strong>Choose what to pay for</strong><br>Pick an item below and add it to your cart.</div></li>
+<li><span class="n">2</span><div><strong>Add your name</strong><br>For dues, also your member number, so we credit the right account.</div></li>
+<li><span class="n">3</span><div><strong>Check out</strong><br>Enter your email for the receipt. Bring it, or just give your name, at the event.</div></li>
+</ol>
+
+<div class="pay-layout">
+<div class="pay-items">
+
+<h2>Member dues</h2>
+<p class="pay-sub">Members can also pay in the Member Center. Either way, the payment is recorded.</p>
+<article class="pay-card" data-item="Annual Dues" data-price="40">
+<div class="pay-head"><h3>Annual Dues</h3><div class="pay-price">$40.00</div></div>
+<p>Your yearly dues for St. Luke Council 14895. At checkout, enter your name and member number.</p>
+<button class="btn btn-navy pay-add" type="button">Add to cart</button>
+</article>
+
+<h2>Events</h2>
+<p class="pay-sub">Open to the parish and community. New entries and tickets appear here as events are scheduled.</p>
+<article class="pay-card" data-item="Bocce Individual Adult Entry" data-price="20">
+<div class="pay-head"><h3>Bocce Individual Adult Entry</h3><div class="pay-price">$20.00</div></div>
+<p class="pay-when">[Event date, time and place]</p>
+<p>One adult entry in the bocce tournament. [Short description.]</p>
+<button class="btn btn-navy pay-add" type="button">Add to cart</button>
+</article>
+<article class="pay-card" data-item="Bocce Family Entry" data-price="35">
+<div class="pay-head"><h3>Bocce Family Entry</h3><div class="pay-price">$35.00</div></div>
+<p class="pay-when">[Event date, time and place]</p>
+<p>Entry for a family. [Who counts; number of players.]</p>
+<button class="btn btn-navy pay-add" type="button">Add to cart</button>
+</article>
+
+<h2>Give</h2>
+<p class="pay-sub">Your gift helps St. Luke Knights serve our parish and neighbors.</p>
+<article class="pay-card" id="give-card">
+<div class="pay-head"><h3>Donation to the council</h3><div class="pay-price">$10 &ndash; $500</div></div>
+<fieldset class="pay-chips"><legend>Choose a cause</legend>
+<label><input type="radio" name="cause" value="General fund" checked><span>General fund</span></label>
+<label><input type="radio" name="cause" value="Coats for Kids"><span>Coats for Kids</span></label>
+<label><input type="radio" name="cause" value="Food pantry"><span>Food pantry</span></label>
+<label><input type="radio" name="cause" value="Other"><span>Other</span></label>
+</fieldset>
+<fieldset class="pay-chips"><legend>Choose an amount</legend>
+<label><input type="radio" name="amt" value="25"><span>$25</span></label>
+<label><input type="radio" name="amt" value="50" checked><span>$50</span></label>
+<label><input type="radio" name="amt" value="100"><span>$100</span></label>
+<label><input type="radio" name="amt" value="other"><span>Other amount</span></label>
+</fieldset>
+<div class="pay-other" id="other-wrap" hidden><label for="other-amt">Amount in dollars</label><input id="other-amt" type="number" min="10" max="500" step="1" placeholder="10 to 500"></div>
+<button class="btn btn-gold pay-add" id="give-add" type="button">Add donation to cart</button>
+</article>
+
+</div>
+
+<aside class="pay-cart" aria-label="Cart" aria-live="polite">
+<h2>Your cart</h2>
+<div id="cart-empty" class="pay-sub">Nothing yet. Add an item to see how checkout would look.</div>
+<ul id="cart-list" class="pay-lines" hidden></ul>
+<div id="cart-total" class="pay-total" hidden><span>Total</span><strong id="cart-sum">$0.00</strong></div>
+<button class="btn btn-navy pay-check" id="check" type="button" disabled>Check out with Square</button>
+<p class="pay-demo-note" id="demo-note" hidden>Demo only. The real page sends you to Square to pay securely.</p>
+<hr>
+<h3>Where our events are</h3>
+<p>St. Luke Catholic Church<br>7575 Holliday Drive East<br>Indianapolis, IN 46260</p>
+<p class="figure-note">[Entrance and parking note.]</p>
+<p><a class="text-link" href="https://www.google.com/maps/search/?api=1&amp;query=7575+Holliday+Drive+East+Indianapolis+IN+46260" rel="noopener">Get directions &rarr;</a></p>
+<h3>Need help?</h3>
+<p>Write to <a data-mail="emailFinancialSecretary" href="#">financialsec@kofc14895.org</a>.</p>
+</aside>
+</div>
+</div>
+</section>
+
+</main>
+
+<div id="site-bottom"></div>
+<script>
+(function () {
+  var cart = [], list = document.getElementById("cart-list"), empty = document.getElementById("cart-empty"),
+      totalRow = document.getElementById("cart-total"), sum = document.getElementById("cart-sum"),
+      check = document.getElementById("check"), note = document.getElementById("demo-note");
+  function money(n) { return "$" + n.toFixed(2); }
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
+  function render() {
+    var total = 0;
+    list.innerHTML = cart.map(function (l, i) {
+      total += l.price * l.qty;
+      return '<li><span>' + esc(l.name) + (l.qty > 1 ? ' &times; ' + l.qty : '') + '</span><span>' + money(l.price * l.qty) +
+        ' <button type="button" class="pay-x" data-i="' + i + '" aria-label="Remove ' + esc(l.name) + '">Remove</button></span></li>';
+    }).join("");
+    var has = cart.length > 0;
+    empty.hidden = has; list.hidden = !has; totalRow.hidden = !has; check.disabled = !has; note.hidden = true;
+    sum.textContent = money(total);
+  }
+  function add(name, price) {
+    for (var i = 0; i < cart.length; i++) if (cart[i].name === name) { cart[i].qty++; return render(); }
+    cart.push({ name: name, price: price, qty: 1 }); render();
+  }
+  document.querySelectorAll(".pay-card[data-item] .pay-add").forEach(function (b) {
+    b.addEventListener("click", function () { var c = b.closest(".pay-card"); add(c.dataset.item, Number(c.dataset.price)); });
+  });
+  var other = document.getElementById("other-wrap"), otherAmt = document.getElementById("other-amt");
+  document.querySelectorAll('input[name="amt"]').forEach(function (r) {
+    r.addEventListener("change", function () { other.hidden = document.querySelector('input[name="amt"]:checked').value !== "other"; });
+  });
+  document.getElementById("give-add").addEventListener("click", function () {
+    var cause = document.querySelector('input[name="cause"]:checked').value, a = document.querySelector('input[name="amt"]:checked').value;
+    var amt = a === "other" ? Math.round(Number(otherAmt.value)) : Number(a);
+    if (!(amt >= 10 && amt <= 500)) { otherAmt.focus(); return; }
+    add("Donation: " + cause + " ($" + amt + ")", amt);
+  });
+  list.addEventListener("click", function (e) {
+    var x = e.target.closest(".pay-x"); if (!x) return; cart.splice(Number(x.dataset.i), 1); render();
+  });
+  check.addEventListener("click", function () { note.hidden = false; });
+  render();
+})();
+</script>
+</body>
+</html>
