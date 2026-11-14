@@ -59,10 +59,9 @@
       '<div><h2 class="footer-h">Links</h2><p>' +
         '<a href="' + esc(S.parishUrl) + '" rel="noopener">St. Luke Catholic Church</a><br>' +
         '<a href="' + esc(S.stateUrl) + '" rel="noopener">Indiana State Council</a><br>' +
-        '<a href="' + esc(S.supremeUrl) + '" rel="noopener">Supreme Council</a><br>' +
-        '<a href="news.html">News</a></p></div>' +
+        '<a href="' + esc(S.supremeUrl) + '" rel="noopener">Supreme Council</a></p></div>' +
       "</div>" +
-      '<div class="container footer-legal">&copy; ' + new Date().getFullYear() + " " + esc(S.councilName) + ", Council #" + esc(S.councilNumber) + "</div></footer>";
+      '<div class="container footer-legal"><a href="news.html" style="color:inherit">News &amp; announcements</a> &middot; &copy; ' + new Date().getFullYear() + " " + esc(S.councilName) + ", Council #" + esc(S.councilNumber) + "</div></footer>";
   }
 
   function fmtDate(iso) {
@@ -142,7 +141,7 @@
       '<h3 class="news-title">' + esc(S.upcomingTitle) + "</h3>" +
       "<p><strong>" + esc(S.upcomingWhen || "") + "</strong>" + (S.upcomingDetail ? " &middot; " + esc(S.upcomingDetail) : "") + "</p>" +
       (S.upcomingNote ? "<p>" + esc(S.upcomingNote) + "</p>" : "") +
-      '<p><a class="text-link" href="events.html">All events &rarr;</a></p></article>';
+      "</article>";
   }
   function annHtml(items, limit) {
     return items.slice(0, limit).map(function (a) {
@@ -283,7 +282,7 @@
     return list.map(function (e) {
       return '<article class="announce-item announce-next"><p class="announce-type">Next event' + (e.type ? " &middot; " + esc(e.type) : "") + "</p>" +
         '<h3 class="news-title">' + esc(e.title) + "</h3><p><strong>" + esc(e.date.toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric", year: "numeric" })) + "</strong></p>" +
-        (e.desc ? "<p>" + esc(e.desc) + "</p>" : "") + '<p><a class="text-link" href="events.html">All events &rarr;</a></p></article>';
+        (e.desc ? "<p>" + esc(e.desc) + "</p>" : "") + "</article>";
     }).join("");
   }
   function buildEvents(box) {
