@@ -50,8 +50,6 @@
 
   function footer() {
     return '<footer class="site-footer"><div class="container footer-grid">' +
-      '<div><h2 class="footer-h">Find us</h2>' +
-        "<p>" + esc(S.parishName) + "<br>" + esc(S.address1) + "<br>" + esc(S.city) + "</p></div>" +
       '<div><h2 class="footer-h">Contact</h2><p>' +
         '<a href="mailto:' + esc(S.emailGrandKnight) + '">' + esc(S.emailGrandKnight) + "</a><br>" +
         '<a href="mailto:' + esc(S.emailMembership) + '">' + esc(S.emailMembership) + "</a><br>" +
