@@ -399,3 +399,6 @@ h1, h2 { text-wrap: balance; }
 .pay-check { width: 100%; } .pay-check[disabled] { opacity: .5; cursor: not-allowed; }
 .pay-demo-note { margin-top: 10px !important; color: var(--bronze); font-weight: 600; }
 @media (max-width: 900px) { .pay-layout { grid-template-columns: 1fr; } .pay-cart { position: static; } }
+
+/* Card photos that should show whole (no cropping), with a quiet backdrop behind the bars */
+.pillar-media.fit { background-size: contain; background-repeat: no-repeat; background-position: center; background-color: #E9EDF4; }
