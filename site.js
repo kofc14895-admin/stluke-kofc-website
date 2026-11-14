@@ -393,7 +393,7 @@
       cap.classList.toggle("gal-cap-hide", items[i].type !== "poster" && !!items[i].caption);   // photos show the caption on the picture instead
     }
     var paused = false, pauseBtn = box.querySelector(".gal-pause");
-    function start() { if (!reduce && !paused && !timer) timer = setInterval(function () { go(i + 1); }, 6500); }
+    function start() { if (!reduce && !paused && !timer) timer = setInterval(function () { go(i + 1); }, 4000); }
     function stop() { clearInterval(timer); timer = null; }
     if (reduce) pauseBtn.hidden = true;
     pauseBtn.addEventListener("click", function () {
