@@ -397,9 +397,8 @@
       cap.classList.toggle("gal-cap-hide", items[i].type !== "poster" && !!items[i].caption);   // photos show the caption on the picture instead
     }
     var paused = false, pauseBtn = box.querySelector(".gal-pause");
-    function start() { if (!reduce && !paused && !timer) timer = setInterval(function () { go(i + 1); }, 4000); }
+    function start() { if (!paused && !timer) timer = setInterval(function () { go(i + 1); }, 4000); }
     function stop() { clearInterval(timer); timer = null; }
-    if (reduce) pauseBtn.hidden = true;
     pauseBtn.addEventListener("click", function () {
       paused = !paused;
       pauseBtn.innerHTML = paused ? "&#9654;" : "&#10074;&#10074;";
@@ -413,7 +412,9 @@
     box.addEventListener("focusin", stop); box.addEventListener("focusout", start);
     var x0 = null;
     box.addEventListener("touchstart", function (e) { x0 = e.touches[0].clientX; stop(); }, { passive: true });
-    box.addEventListener("touchend", function (e) { if (x0 != null) { var dx = e.changedTouches[0].clientX - x0; if (Math.abs(dx) > 40) go(i + (dx < 0 ? 1 : -1)); } x0 = null; }, { passive: true });
+    box.addEventListener("touchend", function (e) { if (x0 != null) { var dx = e.changedTouches[0].clientX - x0; if (Math.abs(dx) > 40) go(i + (dx < 0 ? 1 : -1)); } x0 = null; start(); }, { passive: true });
+    box.addEventListener("touchcancel", function () { x0 = null; start(); }, { passive: true });
+    box.addEventListener("click", function () { if (!paused) start(); });
     go(0); start();
   }
 
