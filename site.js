@@ -326,6 +326,13 @@
       try {
         if (r.status && r.status !== "ok") throw new Error("gviz");
         var now = new Date();
+        var MONTHS = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+        function secondLine(cell) {
+          if (!cell || cell.v == null) return "";
+          var m = /^Date\((\d+),(\d+),(\d+)/.exec(String(cell.v));
+          if (m) return String(cell.f || (MONTHS[+m[2]] + " " + (+m[3]) + ", " + m[1])).trim();
+          return String(cell.v).trim();
+        }
         out = [];
         (r.table.rows || []).forEach(function (row) {
           var c = row.c || [], v = function (i) { return c[i] && c[i].v != null ? c[i].v : ""; };
@@ -338,7 +345,7 @@
           if (link && !/^(https:\/\/|[a-z0-9\-]+\.html$)/i.test(link)) link = "";
           var ord = v(7) === "" ? NaN : Number(v(7));
           out.push({ src: "https://drive.google.com/thumbnail?id=" + encodeURIComponent(id) + "&sz=w1400",
-                     type: /poster/i.test(String(v(2))) ? "poster" : "photo", caption: String(v(1)), link: link, second: String(v(10)).trim(),
+                     type: /poster/i.test(String(v(2))) ? "poster" : "photo", caption: String(v(1)), link: link, second: secondLine(c[10]),
                      order: isNaN(ord) ? 1e9 : ord, from: from ? from.getTime() : 0 });
         });
         out.sort(function (a, b) { return (a.order - b.order) || (b.from - a.from); });
